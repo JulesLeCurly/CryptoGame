@@ -34,7 +34,7 @@ class v():
 	taxe = 0
 	malus = 0
 	liste = {}
-	#
+	# 
 	gain = 0
 	#
 	code = 'debut', time.time()
@@ -154,7 +154,7 @@ elif v.seed == 3:
 	v.seed = 66021
 #
 k = (int(v.seed/1000))-((int(v.seed/10000))*10)
-if v.seed != 0 and k < 4:
+if v.seed != 0 and k < 3:
 	v.seed += (4-k)*1000
 	k += 4-k
 difficulte_minage = 10**k
