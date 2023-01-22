@@ -6,6 +6,7 @@ from ast import literal_eval
 from Data.Data.deff_menu_crypto_v2 import deff_menu
 deff_m = deff_menu()
 
+
 class deff_e(object):
 	def __init__(self):
 		self.nom_fichier = False

@@ -1,6 +1,7 @@
 from random import randint
 import time
 
+
 class deff_menu2(object):
 	def z(self, v):
 		###

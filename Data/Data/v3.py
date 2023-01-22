@@ -1,6 +1,5 @@
 import time
 
-
 class v3(object):
 	def arroud(self, nb):
 		if nb - int(nb) > 0.5:
