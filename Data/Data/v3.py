@@ -60,4 +60,3 @@ class v3(object):
 			if vu == 2:
 				print('Finish:',time.time() - ALL_time,'S')
 			return chunk
-			

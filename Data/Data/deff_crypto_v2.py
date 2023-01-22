@@ -19,7 +19,6 @@ class deff_e(object):
 			information_user = json.load(fichier)
 			return information_user
 	
-	
 	def hhh(encodage, code):
 		if code-int(code) != 0:
 			code = (int(code)*encodage), (int(str(code).split(".")[1])*encodage)

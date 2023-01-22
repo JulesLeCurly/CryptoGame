@@ -4,7 +4,6 @@ import json
 from ast import literal_eval
 
 
-
 class deff_menu(object):
 	def always(self,v):
 		temp_score = v.dollar + (v.arobase*v.cours) + ((v.carte_2080*6000) + (v.carte_3070*50000) + (v.carte_3090*100000)+(v.obj_h*1000000)+(v.obj_ex*10000000))
