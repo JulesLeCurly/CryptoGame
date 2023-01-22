@@ -3,7 +3,7 @@ import time
 import json
 from ast import literal_eval
 
-from Data.deff_menu_crypto_v2 import deff_menu
+from Data.Data.deff_menu_crypto_v2 import deff_menu
 deff_m = deff_menu()
 
 class deff_e(object):
@@ -21,15 +21,23 @@ class deff_e(object):
 	
 	
 	def hhh(encodage, code):
-		code = code*encodage
+		if code-int(code) != 0:
+			code = (int(code)*encodage), (int(str(code).split(".")[1])*encodage)
+		else:
+			code = int(code)*encodage, 0
 		return code
 		
 	def hhh_prime(encodage, code, v):
-		code = code/encodage
-		if code != int(code):
+		code_0 = int(code[0]/encodage)
+		code_1 = int(code[1]/encodage)
+		if code_0 != int(code_0) or code_1 != int(code_1) or encodage != int(encodage):
 			print('error')
 			v.error = True
-		return code
+		if code_1 != 0:
+			code = str(code_0) + "." + str(code_1)
+			return float(code)
+		else:
+			return int(code_0)
 		
 	def enregistrement(self, v):
 		if v.partie == 1:
@@ -40,7 +48,7 @@ class deff_e(object):
 			self.nom_fichier = 'crypto@@@_Partie_3.json'
 		encodage = randint(50000,1000000)
 		temp = {}
-		temp['s'] = encodage
+		temp['s'] = encodage**2
 		temp['arobase'] = deff_e.hhh(encodage, v.arobase*100000)
 		temp['dollar'] = deff_e.hhh(encodage, v.dollar*100)
 		temp['cours'] = deff_e.hhh(encodage, v.cours)
@@ -98,14 +106,14 @@ class deff_e(object):
 			print(' H trouver:',h,'|Nombre d error:',str(nb_error)+'.')
 			print(' Pourcentage final',(int((t*100/(difficulte_minage+nb_error))*10000))/10000,'% |Nombre de h testés:',str(t)+'.')
 			deff_m.routine(v)
-			if (int((t*100/(difficulte_minage+nb_error))*10000))/10000 >= 99.99 and v.seed != 0:
+			if (int((t*100/(difficulte_minage+nb_error))*10000))/10000 >= 99.99 and v.seed != 30042:
 				toure_minage = 0
 				v.obj_int += 1
 				print('Vous avez fait plus de 99,99 % du minage vous recevez donc l objet [?]')
 				print('Vous avez',v.obj_int,'objet [?].')
 				input('Ecrire pour continuer:')
 				ok = 0
-			elif randint(1,200) == 1 and v.Pool == '/':
+			elif randint(1,200) == 1 and v.Pool == '/' and v.seed != 30042:
 				v.arobase += int((1_000_000/v.cours)*1000)/1000
 				print('!')
 				print('!')
@@ -137,7 +145,7 @@ class deff_e(object):
 		informations_utilisateur = literal_eval(deff_e.lire_info(self))
 		temp = informations_utilisateur
 		#
-		encodage = int(temp['s'])
+		encodage = int(temp['s'])**0.5
 		v.arobase = int(deff_e.hhh_prime(encodage, temp['arobase'], v))/100000
 		v.dollar = int(deff_e.hhh_prime(encodage, temp['dollar'], v))/100
 		v.cours = int(deff_e.hhh_prime(encodage, temp['cours'], v))

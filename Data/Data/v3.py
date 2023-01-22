@@ -19,16 +19,17 @@ class v3(object):
 		#
 		pr = ('Encore ---- S')
 		debut = time.time()
+		ALL_time = time.time()
 		#
 		seed = int(seed)
 		tim = 0
 		nb = str(self.nob(seed, 1))
-		t = 0
+		t = moy = 0
 		toure = RAM2
 		chunk = {}
 		difference = MAX - MIN
 		if MAX < MIN or difference > 10**20:
-		   	print('Error')
+		   	print('v3 Error')
 		else:
 			while toure != RAM:
 				toure += 1
@@ -49,9 +50,14 @@ class v3(object):
 				elif vu == 2:
 					if toure == int(toure/(RAM/100))*RAM/100:
 						print(str(int(toure/(RAM/100)) ) + '%	' + pr)
-						pr = 'Encore ' + str(int((time.time() - debut)*(100 - int(toure/(RAM/100)))*100)/100) + 'S'
+						moy += time.time() - debut
+						moy = int(moy*100)/100
+						pr = int(((moy/int(toure/(RAM/100))) * (((100 - int(toure/(RAM/100)))*100)/100))*100)/100
+						pr = 'Encore ' + str(pr) + 'S'
 						pr = str(pr)
 						debut = time.time()
 				####
+			if vu == 2:
+				print('Finish:',time.time() - ALL_time,'S')
 			return chunk
 			

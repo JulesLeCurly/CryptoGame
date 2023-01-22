@@ -6,12 +6,13 @@ import time
 import json
 from ast import literal_eval
 #
-
-from Data.deff_crypto_v2 import deff_e
-from Data.v3 import v3
+import sys
+#
+from Data.Data.deff_crypto_v2 import deff_e
+from Data.Data.v3 import v3
 v3 = v3()
-from Data.deff_menu2_crypto_v2 import deff_menu2
-from Data.deff_menu_crypto_v2 import deff_menu
+from Data.Data.deff_menu2_crypto_v2 import deff_menu2
+from Data.Data.deff_menu_crypto_v2 import deff_menu
 
 deff = deff_e()
 deff_m = deff_menu()
@@ -20,15 +21,13 @@ deff_m2 = deff_menu2()
 #dictionaire
 
 #class
-class nothing():
-	1+1
 class v():
 	arobase = 0
 	dollar = 250
 	cours = 70
 	cours1 = 70
-	cours_max = 70
-	cours_low = 70
+	cours_max = 'set'
+	cours_low = 'set'
 	toure_de_jeu = 0
 	vendre = 0
 	taxe = 0
@@ -84,11 +83,12 @@ while ok != '1' and ok != '2':
 	ok = input()
 if ok == '2':
 	deff.choix_de_partie(v)
-	if v.error == True and 1 == 2:#####
+	if v.error == True:#####
 		print('Le fichier de la sauvegarde a été corrompu nous devront donc là supprimer!!!')
 		deff.ecrire_info('Fichier Vide')
-		while True:
-			1
+		print(' Le fichier a été vider')
+		time.sleep(4)
+		sys.exit()
 else:
 	print('Seed:')
 	print('  Conseil de seed: 35042 or 1 	| Partie rapide: 2')
@@ -111,27 +111,40 @@ else:
 		input('	  <Autre> pour continuer:')
 
 
+#on change les variable
+if v.seed == 4:
+	v.seed = randint(0,999)+randint(4,6)*1000+randint(0,9)*10000
+elif v.seed == 2:
+	v.seed = 44066
+elif v.seed == 1:
+	v.seed = 35042
+elif v.seed == 0:
+	v.seed = 30042
+elif v.seed == 3:
+	v.seed = 66021
+#
 
-variation_du_cours = (v.seed - int(v.seed/10)*10)*50
+variation_du_cours = (v.seed - (int(v.seed/10)*10))*50
 MAX = variation_du_cours+50
 MIN = variation_du_cours*-1
+print(MAX, MIN)
 vu = 2#0rien / 1% / 2...
 RAM = 100_000
 RAM2 = 0
 j = 4
 v.chunk = v3.chunk(v.sync_seed, RAM, RAM2, MAX, MIN, vu, j)
+print('')
 #
+print('Veuillez patienter')
+time.sleep(1)
 #Si il y a une partie de charger on retablit les donner du cours d @
 if v.partie != 0:
-	print('Veuillez patienter')
 	t = 0
 	v.cours = v.cours1 = 70
 	while t != v.toure_de_jeu:
-		t += 1		
+		t += 1
 		v.cours1 = v.cours
-		temp = int(t/35)
-		if temp > 25:
-			temp = 25
+		temp = int(v.cours/200)
 		if v.cours > 100:			
 			v.cours += v.chunk[t]-temp
 			v.cours = int(v.cours)
@@ -140,21 +153,18 @@ if v.partie != 0:
 			v.cours = int(v.cours*100)/100
 		if v.cours < 1:
 			v.cours = 1
+		####
+		if v.cours_max == 'set':
+			v.cours_max = v.cours_low = v.cours
+		if v.cours > v.cours_max:
+			v.cours_max = v.cours
+		if v.cours < v.cours_low:
+			v.cours_low = v.cours
 		v.liste[t] = int(v.cours)
-	print('Terminer!')
+print('Terminer!')
 
-#on change les variable
-if v.seed == 4:
-	v.seed = randint(0,999)+randint(4,6)*1000+randint(0,9)*10000
-elif v.seed == 2:
-	v.seed = 44066
-elif v.seed == 1:
-	v.seed = 35042
-elif v.seed == 3:
-	v.seed = 66021
-#
 k = (int(v.seed/1000))-((int(v.seed/10000))*10)
-if v.seed != 0 and k < 4:
+if v.seed != 0 and k < 4 and v.seed != 30042:
 	v.seed += (4-k)*1000
 	k += 4-k
 difficulte_minage = 10**k
@@ -162,7 +172,6 @@ difficulte_minage = 10**k
 v.malus = int(v.seed/10000)
 v.gain = str(v.seed)
 v.gain = int(v.gain[2] + v.gain[3])/10
-
 
 time.sleep(1)
 temp = 600
@@ -257,7 +266,12 @@ while True:
 		v.vendre = 0
 		
 	elif ok == 'l':
-		deff_m.l(v)
+		print('HS')
+		#deff_m.l(v)
+		#try:
+		#	deff_m.l(v)
+#		except:
+	#		print('une erreur c est produite')
 		
 	elif ok == 'i':
 		deff_m.arrond(v)

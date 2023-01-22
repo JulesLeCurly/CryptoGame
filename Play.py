@@ -1,2 +1,2 @@
 #Play
-from Data import Crypto_2
+from Data.Data import Crypto_2

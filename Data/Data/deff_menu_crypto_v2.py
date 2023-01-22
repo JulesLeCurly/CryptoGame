@@ -40,9 +40,7 @@ class deff_menu(object):
 			v.Pool_toure -= 1
 		v.toure_de_jeu += 1
 		v.cours1 = v.cours
-		temp = int(v.toure_de_jeu/35)
-		if temp > 25:
-			temp = 25
+		temp = int(v.cours/200)
 		if v.cours > 100:			
 			v.cours += v.chunk[v.toure_de_jeu]-temp
 			v.cours = int(v.cours)
@@ -55,6 +53,8 @@ class deff_menu(object):
 			deff_menu.malus(self, v)
 		deff_menu.arrond(self, v)
 		####
+		if v.cours_max == 'set':
+			v.cours_max = v.cours_low = v.cours
 		if v.cours > v.cours_max:
 			v.cours_max = v.cours
 			if v.Pool == 'HELLO':
@@ -127,24 +127,26 @@ class deff_menu(object):
 				x = 0
 				y += 1
 		ok = 0
-		while ok != '3':
-			print(' 1 Voir tout	2 graphique	3 quitter')
+		while ok != '4':
+			print('		Toure:',v.toure_de_jeu)
+			print(' <1> Voir tout	<2> graphique	<3> Plus d options')
+			print('		<4> quitter')
 			ok = input()
+			if v.toure_de_jeu == 0 and ok != '4':
+				print('error revenez plus tard SVP')
+				ok = 'okjbn'
 			if ok == '1':
-				if v.toure_de_jeu == 0:
-					print('error')
-				else:
-						print('Vours d @:')
-						print(v.liste)
-						t = 0
-						moy = 0
-						while t != v.toure_de_jeu:
-							t += 1
-							moy += v.liste[t]
-						moy = int(moy/v.toure_de_jeu)
-						print('Maximum:',int(v.cours_max),'Minimum:',int(v.cours_low),'Moyenne:',moy,'	by HELLO')
-						print('')
-			elif ok == '2':
+				print('Vours d @:')
+				print(v.liste)
+				t = 0
+				moy = 0
+				while t != v.toure_de_jeu:
+					t += 1
+					moy += v.liste[t]
+				moy = int(moy/v.toure_de_jeu)
+				print('Maximum:',int(v.cours_max),'Minimum:',int(v.cours_low),'Moyenne:',moy,'	by HELLO')
+				print('')
+			elif ok == '2' or ok == '3':
 				x = y = 1
 				screen = {}
 				while y < 31:
@@ -154,63 +156,122 @@ class deff_menu(object):
 						y = y+1
 						x = 1
 				x = y = 0
-				pos1 = float(input('Position de debut:'))-1
-				pos2 = float(input('Position de fin:'))
+				if ok == '2':
+					pos1 = float(input('Position de debut:'))
+					pos2 = float(input('Position de fin:'))
+				else:
+					print('________________')
+					print(' <1> voir tout  <2> pos + MAX/MIN')
+					print('________________')
+					ok = input()
+					if ok == '2':
+						MAX = 0
+						MIN = 0
+						t = 0
+						while True:
+							t += 1
+							temp = int(v.liste[t])
+							if temp == int(v.cours_low):
+								MIN = t
+							elif temp == int(v.cours_max):
+								MAX = t
+							if MAX != 0 and MIN != 0:
+								break
+						print('________________')
+						print(' Position de MAX:',MAX)
+						print(' Position de MIN:',MIN)
+						print('')
+						print(' <1> pos1 + MAX')
+						print(' <2> pos1 + MIN')
+						print(' <3> MAX + pos2')
+						print(' <4> MIN + pos2')
+						print(' <5> MIN/MAX')
+						print('________________')
+						ok = input()
+						if ok == '1':
+							print(' pos2 = MAX')
+							pos1 = float(input('Position de debut:'))
+							pos2 = MAX
+						elif ok == '2':
+							print(' pos2 = MIN')
+							pos1 = float(input('Position de debut:'))
+							pos2 = MIN
+						elif ok == '3':
+							print(' pos1 = MAX')
+							pos1 = MAX
+							pos2 = float(input('Position de fin:'))
+						elif ok == '4':
+							print(' pos1 = MIN')
+							pos1 = MIN
+							pos2 = float(input('Position de fin:'))
+						else:
+							if MIN < MAX:
+								pos1 = MIN
+								pos2 = MAX
+							else:
+								pos1 = MAX
+								pos2 = MIN
+
+					else:
+						pos1 = 1
+						pos2 = v.toure_de_jeu
 				if pos1 > pos2:
 					print('Error')
 					print('La position de debut ne peut pas etre plus grande que la position de fin.')
 				elif pos1 < 1 or pos2 > v.toure_de_jeu:
 					print('Error')
 					print('Certaine position n existe pas')
-				elif pos2 - pos1 == 0:
+				elif pos2 == pos1 == 0:
 					print('Error')
+					print('Les positions ne peuvent pas etre indentique    ')
 				else:
-					temp = (pos2 - pos1)/30
+					case = (pos2 - (pos1-1))/30
 					#
 					toure = 0
-					max = 0
-					min = 'debut'
 					temp_liste = {}
-					while toure != 30:
+					MAX = MIN = 0
+					while toure < 30:
 						toure += 1
-						t = 0
+						global_select = 0
 						moy = 0
-						while t < temp:
-							t += 1
-							if int((toure*temp)+t+pos1) in v.liste:
-								moy += v.liste[int((toure*temp)+t+pos1)]
-							else:
-								t -= 1
+						while True:
+							moy += v.liste[(pos1-1)+global_select+toure]
+							global_select += 1
+							if global_select >= case:
+								moy = moy/global_select
+								if moy - int(moy) > 0.5:
+									moy += 1
+								moy = int(moy)
+								temp_liste[toure] = moy
+								
+								if toure == 1:			
+									MAX = MIN = moy
+								if moy > MAX:
+									MAX = moy
+								elif moy < MIN:
+									MIN = moy
+								
 								break
-						if min == 'debut':
-							min = moy
-							max = moy
-						if moy > max:
-							max = moy
-						if moy < min:
-							min = moy
-						temp_liste[toure] = int(moy/t)
-					t = 0
-					if max == min:
-						print('error')
-					else:
-						while t != 30:
-							t += 1
-							j = temp_liste[t]-min
-							j = (j*30)/(max-min)
-							if j - int(j) > 0.5:
-								j += 1 
-							if j < 1:
-								j = 1
-							j = int(j)
-							screen[j, t] = '#'
-						#
-						x = 1
-						y = 30
-						while y != 0:
-							print(screen[y,1],screen[y,2],screen[y,3],screen[y,4],screen[y,5],screen[y,6],screen[y,7],screen[y,8],screen[y,9],screen[y,10],screen[y,11],screen[y,12],screen[y,13],screen[y,14],screen[y,15],screen[y,16],screen[y,17],screen[y,18],screen[y,19],screen[y,20],screen[y,21],screen[y,22],screen[y,23],screen[y,24],screen[y,25],screen[y,26],screen[y,27],screen[y,28],screen[y,29],screen[y,30])
-							y = y-1
-		
+					#
+					toure = 0
+					while toure < 30:
+						toure += 1
+						temp = ((temp_liste[toure]-MIN)*30)/(MAX-MIN)
+						if temp < 1:
+							temp = 1
+						screen[int(temp), toure] = '#'
+
+					#
+					x = 1
+					y = 30
+					while y != 0:
+						print(screen[y,1],screen[y,2],screen[y,3],screen[y,4],screen[y,5],screen[y,6],screen[y,7],screen[y,8],screen[y,9],screen[y,10],screen[y,11],screen[y,12],screen[y,13],screen[y,14],screen[y,15],screen[y,16],screen[y,17],screen[y,18],screen[y,19],screen[y,20],screen[y,21],screen[y,22],screen[y,23],screen[y,24],screen[y,25],screen[y,26],screen[y,27],screen[y,28],screen[y,29],screen[y,30])
+						y -= 1
+					print(' Info:')
+					print(' Max',MAX,' Min',MIN,' Tableau: 30X30')
+					print(' un careaux verticale = ',int((case)*100)/100,'Toures de jeu')
+					print(' un careaux horizontale = ',int((MAX/30)*100)/100,'$ (Valeurs arobase)')
+
 
 		
 		
