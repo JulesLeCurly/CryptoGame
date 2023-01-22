@@ -17,8 +17,6 @@ from Data.Data.deff_menu_crypto_v2 import deff_menu
 deff = deff_e()
 deff_m = deff_menu()
 deff_m2 = deff_menu2()
-#dictionaire
-
 #class
 class v():
 	arobase = 0
